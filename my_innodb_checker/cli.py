@@ -107,7 +107,7 @@ def main() -> None:
         return
     init_logger(name="my_innodb_checker", level=parsed_args.log_level)
     _logger = getLogger("my_innodb_checker")
-    _logger.debug("Starting %s", __name__)
+    _logger.info("Starting mychecker")
     parsed_args.func(parsed_args)
 
 
@@ -130,3 +130,24 @@ def check_cluster(args) -> None:
         }
     mysqlsh = MysqlSh(logins=logins)
     mysqlsh.cluster_status()
+
+
+@command(
+    parent=subargs,  # type: ignore
+)
+def check_clusterset(args) -> None:
+    """
+    Cli command to check clusterset
+    """
+    logins: Union[str, MyLogin, None] = None
+    if os.path.isfile(args.defaults_file):
+        logins = args.defaults_file
+    else:
+        logins = {
+            "user": args.user,
+            "password": args.password,
+            "host": args.host,
+            "port": args.port,
+        }
+    mysqlsh = MysqlSh(logins=logins)
+    mysqlsh.clusterset_status()
