@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "my-innodb-checker"
-version = "1.0.0"
+version = "1.0.1"
 description = "Mysql InnoDB cluster monitoring"
 authors = ["Arunas Grigalionis <arunas.grigalionis@gmail.com>"]
 readme = "README.md"

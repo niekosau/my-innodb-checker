@@ -14,6 +14,7 @@ from tabulate import tabulate  # type: ignore
 from .constants import (
     CheckStatus,
     ClusterDict,
+    ClusterReplicaStatus,
     ClustersetBaseStatus,
     ClustersetDict,
     ClustersetGlobalStatus,
@@ -91,16 +92,18 @@ class MysqlSh:
         for k, v in topology.items():
             lag = v.get("replicationLagFromImmediateSource")
             primary = MemberRole[v.get("memberRole")].value
+            status: str = v.get("status").replace("(", "").replace(")", "")
             r: NodeDict = {
                 "node": k.split(":")[0],
                 "primary": primary,
                 "mode": v.get("mode"),
-                "status": v.get("status"),
+                "status": status,
                 "version": v.get("version"),
                 "lag": lag if lag or primary else "00:00:00.000000",
             }
             self._node_results.append(r)
-        exit_status = CheckStatus[self._cluster_results.get("status")].value  # type: ignore
+        cluster_status = ClusterReplicaStatus[self._cluster_results["status"]].value
+        exit_status = CheckStatus[cluster_status].value
         for s in self._node_results:
             node_status = MemberStatus[s.get("status")].value
             exit_status = max(exit_status, CheckStatus[node_status].value)

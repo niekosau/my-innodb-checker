@@ -27,7 +27,7 @@ class MemberStatus(Enum):
     OFFLINE = "CRITICAL"
     ERROR = "CRITICAL"
     UNREACHABLE = "UNKNOW"
-    (MISSING) = "CRITICAL"
+    MISSING = "CRITICAL"
 
 
 class MemberRole(Enum):
